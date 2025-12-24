@@ -31,17 +31,20 @@ public class User implements UserDetails{
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer id;
+    private Integer id;
+
     @Column(nullable = false)
-    String username;
+    private String username;
+
     @Column(nullable = false)
-    String password;
-    String firstname;
-    String lastname;
-    String country;
+    private String password;
+    private String firstname;
+    private String lastname;
+    private String country;
+    
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    Role role;
+    private Role role;
 
 
     @Override
