@@ -68,8 +68,8 @@ public class ProductService {
         Product existingProduct = productRepository.findById(id)
                             .orElseThrow(()-> new ProductNotFoundException("Producto no encontrado con Id: "+ id));
         productRepository.delete(existingProduct);
-
     }
+    
     //mapear de entidad a dto
     private ProductResponseDTO mapToDTO(Product product){
         return  new ProductResponseDTO(
