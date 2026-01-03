@@ -2,6 +2,7 @@ package dev.jlopez.monolitojwt.user.service;
 
 import java.util.List;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,15 +13,16 @@ import dev.jlopez.monolitojwt.user.dto.responseDTO.UserResponseDTO;
 import dev.jlopez.monolitojwt.user.model.Role;
 import dev.jlopez.monolitojwt.user.model.User;
 import dev.jlopez.monolitojwt.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder; //metodo de SecurityConfig. (podemos inyectar funciones)
 
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+
 
     //crear user
     @Transactional
@@ -28,7 +30,11 @@ public class UserService {
         if(userRepository.existsByUsername(requestDTO.username())){
             throw new BadRequestException("El user con username "+ requestDTO.username() + " ya existe.");
         }
-        User user = mapToEntity(requestDTO);
+        //hasheamos la contraseña antes de guardar
+        String encodedPassword = passwordEncoder.encode(requestDTO.password());
+        
+        User user = mapToEntity(requestDTO, encodedPassword);
+
         User savedUser = userRepository.save(user);
         return mapToDto(savedUser);
     }
@@ -58,22 +64,21 @@ public class UserService {
         .map(this::mapToDto) //cada user de la lista a dto
         .toList();
     }
+
+    //actualizar
     @Transactional
     public UserResponseDTO updateUser(Integer id, UserRequestDTO requestDTO){
         User user = userRepository.findById(id)
                     .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado con id: " + id));
         
-        // Actualización de datos básicos
         user.setFirstname(requestDTO.firstname());
         user.setLastname(requestDTO.lastname());
         user.setCountry(requestDTO.country());
         user.setUsername(requestDTO.username());
 
-        // Manejo de password pensando en seguridad futura
+        // si viene contraseña nueva, hasheamos y seteamos
         if (requestDTO.password() != null && !requestDTO.password().isBlank()) {
-            //  user.setPassword(passwordEncoder.encode(requestDTO.password()));
-            // Por ahora lo dejamos así, pero sabiendo que aquí irá la lógica de seguridad
-            user.setPassword(requestDTO.password());
+            user.setPassword(passwordEncoder.encode(requestDTO.password()));
         }
         return mapToDto(userRepository.save(user));
     }
@@ -109,10 +114,10 @@ public class UserService {
         );
     }
     //privado mapear dto a entidad
-    private User mapToEntity(UserRequestDTO requestDTO){
+    private User mapToEntity(UserRequestDTO requestDTO, String encodedPassword){
         User user = User.builder()
                     .username(requestDTO.username())
-                    .password(requestDTO.password())
+                    .password(encodedPassword)
                     .firstname(requestDTO.firstname())
                     .lastname(requestDTO.lastname())
                     .country(requestDTO.country())
