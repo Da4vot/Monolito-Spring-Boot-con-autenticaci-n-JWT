@@ -21,7 +21,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
     @Value("${jwt.secretkey}")
-    private static String SECRET_KEY;
+    private String SECRET_KEY;
 
     //1. preparacion de la firma, convertir de texto(BASE64) a bytes (binarios)
     private SecretKey getKey(){
