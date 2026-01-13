@@ -82,14 +82,13 @@ public class ProductService {
     }
     //convertir RequestDto a entidad
     private Product mapToEntity(ProductRequestDTO requestDTO){
-        Product product = Product.builder()
+        return Product.builder()
                     .name(requestDTO.name())
                     .description(requestDTO.description())
                     .price(requestDTO.price())
                     .stock(requestDTO.stock())
                     .build();
-        
-        return product;
+
     }
 
 }
