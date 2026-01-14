@@ -74,10 +74,10 @@ public class JwtService {
     //4.2 virificar expiracion
     private boolean isTokenExpired(String token){
         try {
-            return getClaim(token, Claims::getExpiration).before(new Date());
+            Date expiration = getClaim(token, Claims::getExpiration);
+            return expiration.before(new Date());
         } catch (ExpiredJwtException e) {
             return true;
         }
-
     }
 }
