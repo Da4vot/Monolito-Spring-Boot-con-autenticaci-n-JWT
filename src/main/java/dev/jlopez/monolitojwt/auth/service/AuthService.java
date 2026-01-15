@@ -10,8 +10,12 @@ import dev.jlopez.monolitojwt.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -34,23 +38,29 @@ public class AuthService {
 
         //persistencia: guardamos user en db
         userRepository.save(user);
-        //generamos token con datos ingresados.
-        String token = jwtService.buildToken(user);
 
+        //generamos token con datos ingresados.
+        String token = jwtService.buildToken(buildExtraClaims(user), user);
         return new AuthResponseDTO(token);
     }
 
     public  AuthResponseDTO login(LoginRequestDTO request){
-
-        authenticationManager.authenticate(
+        Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.username(), request.password())
         );
 
-        User user = userRepository.findByUsername(request.username())
-                .orElseThrow(() -> new UserNotFoundException("Usuario no encontrado post-autenticación. "));
+        User user = (User) authentication.getPrincipal();
 
-        String token = jwtService.buildToken(user);
+        String token = jwtService.buildToken(buildExtraClaims(user), user);
 
         return new AuthResponseDTO(token);
+    }
+
+    //metodo privado para generar extra claims, mantenibilidad en el futuro si agrego mas claims.
+    private Map<String, Object> buildExtraClaims(User user) {
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("role", user.getRole().name());
+
+        return extraClaims;
     }
 }

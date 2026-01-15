@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
-
-
 @RestController
 @RequestMapping("api/users")
 public class UserController {
@@ -36,7 +33,6 @@ public class UserController {
     public ResponseEntity<UserResponseDTO> createUser(@Valid @RequestBody UserRequestDTO requestDTO) {
         return new ResponseEntity<>(userService.createUser(requestDTO), HttpStatus.CREATED);
     }
-    
 
     @GetMapping("/{username}")
     public ResponseEntity<UserResponseDTO> getByUsername(@PathVariable String username){

@@ -31,6 +31,7 @@ public class JwtService {
 
     //2. Generacion del token.
     private String generateToken(Map<String, Object> extraClaims, UserDetails user){
+
         return Jwts.builder()
             .claims(extraClaims)
             .subject(user.getUsername()) //a quien pertenece el token
@@ -41,8 +42,8 @@ public class JwtService {
     }
 
     //builder del token
-    public String buildToken(UserDetails user){
-        return generateToken(new HashMap<>(), user);
+    public String buildToken(Map<String, Object> extraClaims, UserDetails user){
+        return generateToken(extraClaims, user);
     }
     
     //3. Lectura y validacion
