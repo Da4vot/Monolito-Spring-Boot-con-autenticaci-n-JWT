@@ -41,7 +41,7 @@ public class JwtService {
             .compact(); //convierte en el string final
     }
 
-    //builder del token
+    //builder publico del token
     public String buildToken(Map<String, Object> extraClaims, UserDetails user){
         return generateToken(extraClaims, user);
     }
@@ -60,19 +60,18 @@ public class JwtService {
         final Claims claims = getAllClaims(token);
         return claimsResolver.apply(claims);
     }
-    //3.3 Obtener username
+    //3.3 Obtener username del token
     public String getUsernameFromToken(String token){
         return getClaim(token, Claims::getSubject);
     }
 
     //4. Verificacion final
-    //4.1 Compara el username del token con el de la base de datos y revisa la fecha.
+    //4.1 Compara el username del token con el de la base de datos y tambien la expiracion.
     public boolean isTokenValid(String token, UserDetails user){
         final String username = getUsernameFromToken(token);
         return (username.equals(user.getUsername()) && !isTokenExpired(token));
     }
 
-    //4.2 virificar expiracion
     private boolean isTokenExpired(String token){
         try {
             Date expiration = getClaim(token, Claims::getExpiration);
