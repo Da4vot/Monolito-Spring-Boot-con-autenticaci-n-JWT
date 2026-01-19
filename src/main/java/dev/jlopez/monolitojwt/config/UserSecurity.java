@@ -19,8 +19,14 @@ public class UserSecurity {
 
     //verificaion por id
     public boolean isOwner(Authentication authentication, Integer id){
-        User user = (User) authentication.getPrincipal();
-        return user.getId().equals(id);
+        if(authentication == null ||  !authentication.isAuthenticated() || id == null){
+            return false;
+        }
+        Object userRequest = authentication.getPrincipal();
+        if (userRequest instanceof User user && user.getId() != null){
+            return user.getId().equals(id);
+        }
+        return false;
     }
 
 }

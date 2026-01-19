@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -14,7 +16,7 @@ import dev.jlopez.monolitojwt.common.dto.ErrorResponse;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 1. Usuario no encontrado(404)
+    // 1. 404
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFound(UserNotFoundException ex) {
         return buildError(HttpStatus.NOT_FOUND, ex.getMessage());
@@ -28,7 +30,7 @@ public class GlobalExceptionHandler {
                 "Ocurrio un error interno inesperado");
     }
 
-    // 3. argumentos no validos
+    // 3.
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         //extraemos mensajes de error y los unimos
@@ -40,19 +42,33 @@ public class GlobalExceptionHandler {
         return buildError(HttpStatus.BAD_REQUEST, details);
     }
 
-    // 4. bad request
+    // 4.
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponse> handleBadRequestException(BadRequestException ex) {
         return buildError(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
-    // 5. product not found
+    // 5.
     @ExceptionHandler(ProductNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleProductNotFoundException(ProductNotFoundException ex) {
         return buildError(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    // funcion transversal para construccion de errores
+    // errores de autorizacion:
+
+    // 401 - No autenticado
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponse> handleAuthentication(AuthenticationException ex) {
+        return buildError(HttpStatus.UNAUTHORIZED, "No estás autenticado o el token es inválido");
+    }
+
+    // 403 - Sin permisos
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDenied(AccessDeniedException ex) {
+        return buildError(HttpStatus.FORBIDDEN, "No tienes permisos para acceder a este recurso");
+    }
+
+    // extra. constructor de error messages
     private ResponseEntity<ErrorResponse> buildError(HttpStatus status, String message) {
         ErrorResponse error = new ErrorResponse(
                 status.value(),
