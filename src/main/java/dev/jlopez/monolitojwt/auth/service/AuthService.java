@@ -26,14 +26,14 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthResponseDTO register(RegisterRequestDTO request){
+    public AuthResponseDTO register(RegisterRequestDTO request, Role role){
         User user = User.builder()
                 .username(request.username())
                 .password(passwordEncoder.encode(request.password()))
                 .firstname(request.firstname())
                 .lastname(request.lastname())
                 .country(request.country())
-                .role(Role.USER)
+                .role(role)
                 .build();
 
         //persistencia: guardamos user en db
