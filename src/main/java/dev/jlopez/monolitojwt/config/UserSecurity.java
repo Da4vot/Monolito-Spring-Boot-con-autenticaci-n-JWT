@@ -9,8 +9,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class UserSecurity {
 
-    private final UserRepository userRepository;
-
     //verificacion por username
     public boolean isOwner(Authentication authentication, String username){
         String authenticationUsername = authentication.getName();
