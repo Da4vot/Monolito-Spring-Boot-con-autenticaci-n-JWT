@@ -1,4 +1,4 @@
-package dev.jlopez.monolitojwt;
+package dev.jlopez.monolitojwt.user.service;
 
 import dev.jlopez.monolitojwt.exception.BadRequestException;
 import dev.jlopez.monolitojwt.user.dto.requestDTO.UserRequestDTO;
@@ -6,7 +6,7 @@ import dev.jlopez.monolitojwt.user.dto.responseDTO.UserResponseDTO;
 import dev.jlopez.monolitojwt.user.model.Role;
 import dev.jlopez.monolitojwt.user.model.User;
 import dev.jlopez.monolitojwt.user.repository.UserRepository;
-import dev.jlopez.monolitojwt.user.service.UserService;
+import dev.jlopez.monolitojwt.user.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

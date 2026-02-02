@@ -1,4 +1,4 @@
-package dev.jlopez.monolitojwt.user.service;
+package dev.jlopez.monolitojwt.user;
 
 import java.util.List;
 

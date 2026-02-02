@@ -1,7 +1,6 @@
 package dev.jlopez.monolitojwt.auth.filter;
 
 import dev.jlopez.monolitojwt.auth.service.JwtService;
-import dev.jlopez.monolitojwt.exception.UserNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

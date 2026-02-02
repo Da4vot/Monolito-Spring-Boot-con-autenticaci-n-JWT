@@ -1,6 +1,5 @@
-package dev.jlopez.monolitojwt;
+package dev.jlopez.monolitojwt.config;
 
-import dev.jlopez.monolitojwt.config.UserSecurity;
 import dev.jlopez.monolitojwt.user.model.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

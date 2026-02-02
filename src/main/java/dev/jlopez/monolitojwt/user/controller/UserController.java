@@ -1,14 +1,13 @@
 package dev.jlopez.monolitojwt.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.jlopez.monolitojwt.user.dto.requestDTO.UserRequestDTO;
 import dev.jlopez.monolitojwt.user.dto.responseDTO.UserResponseDTO;
-import dev.jlopez.monolitojwt.user.service.UserService;
+import dev.jlopez.monolitojwt.user.UserService;
 import jakarta.validation.Valid;
 
 import java.util.List;
