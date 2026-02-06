@@ -91,9 +91,7 @@ public class UserServiceTest {
 
         when(userRepository.existsByUsername(userRequestDTO.username())).thenReturn(true);
 
-        assertThrows(BadRequestException.class, () -> {
-            userService.createUser(userRequestDTO);
-        });
+        assertThrows(BadRequestException.class, () -> userService.createUser(userRequestDTO));
     }
 
     @Test

@@ -6,8 +6,6 @@ import dev.jlopez.monolitojwt.auth.dto.RegisterRequestDTO;
 import dev.jlopez.monolitojwt.user.model.Role;
 import dev.jlopez.monolitojwt.user.model.User;
 import dev.jlopez.monolitojwt.user.repository.UserRepository;
-import net.bytebuddy.asm.Advice;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -95,9 +93,7 @@ public class AuthServiceTest {
                 .thenThrow(new BadCredentialsException("Credenciales invalidas."));
 
         //act/assert
-        BadCredentialsException ex =  assertThrows(BadCredentialsException.class, () -> {
-            authService.login(loginRequest);
-        });
+        BadCredentialsException ex =  assertThrows(BadCredentialsException.class, () -> authService.login(loginRequest));
         assertEquals("Credenciales invalidas.",ex.getMessage());
     }
 
